@@ -4,6 +4,14 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>false</ImplicitUsings>
+    <UserSecretsId>ITSG.KBS.Web</UserSecretsId>
+    <RootNamespace>ITSG.KBS.Web</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EasyNetQ" Version="7.4.3" />
+    <PackageReference Include="ITSG.DFV.Common" Version="1.0.1" />
+    <PackageReference Include="ITSG.DFV.Common.Hosting.Bus" Version="1.0.1" />
+  </ItemGroup>
 
 </Project>
