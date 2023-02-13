@@ -6,7 +6,15 @@
     <ImplicitUsings>false</ImplicitUsings>
     <Nullable>enable</Nullable>
 
+    <UserSecretsId>ITSG.KBS.App</UserSecretsId>
+    <RootNamespace>ITSG.KBS.App</RootNamespace>
+
     <ServerGarbageCollection>false</ServerGarbageCollection>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="EasyNetQ" Version="7.4.3" />
+    <PackageReference Include="EasyNetQ.Serialization.SystemTextJson" Version="7.4.3" />
+    <ProjectReference Include="..\ITSG.KBS.Messages\ITSG.KBS.Messages.csproj" />
+  </ItemGroup>
 </Project>

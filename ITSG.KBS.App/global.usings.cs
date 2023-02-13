@@ -8,3 +8,12 @@ global using System.Net.Http.Json;
 global using System.Threading;
 global using System.Threading.Tasks;
 global using System.Net.Http.Headers;
+global using ITSG.KBS;
+
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.Hosting;
+
+global using System.Reflection;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Logging;
+global using EasyNetQ;
