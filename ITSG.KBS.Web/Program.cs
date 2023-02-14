@@ -10,24 +10,11 @@ builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.Environment
 builder.Configuration.AddUserSecrets(Assembly.GetExecutingAssembly(), optional: true);
 builder.Configuration.AddEnvironmentVariables();
 
-builder.Logging.ClearProviders();
-builder.Logging.AddSimpleConsole(o => { o.SingleLine = true; });
-if (System.Diagnostics.Debugger.IsAttached) builder.Logging.AddDebug();
-
+builder.UseSerilog();
 
 builder.Services.Configure<Timeouts>(builder.Configuration.GetSection("Timeouts"));
-builder.Services.AddTransient<IBusInterceptor, BusInterceptor>();
 
-builder.Services.AddSingleton(sp =>
-{
-    var rabbitConnectionString = builder.Configuration.GetConnectionString("RabbitMQ");
-    if (string.IsNullOrEmpty(rabbitConnectionString)) throw new Exception("Missing connection string RabbitMQ");
-
-    var bus = EasyNetQ.RabbitHutch.CreateBus(rabbitConnectionString);
-    sp.GetRequiredService<ILoggerFactory>().CreateLogger("PROGRAM").LogInformation("RabbitMQ bus established...");
-
-    return bus;
-});
+builder.Services.AddRabbitMQ("RabbitMQ");
 
 builder.Services.AddSingleton<ITSG.DFV.Common.Interfaces.IBus, EasyNetQBusAdapter>();
 

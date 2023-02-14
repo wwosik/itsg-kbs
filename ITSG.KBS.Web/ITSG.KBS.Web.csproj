@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ITSG.KBS.Messages\ITSG.KBS.Messages.csproj" />
+    <ProjectReference Include="..\ITSG.KBS.Common\ITSG.KBS.Common.csproj" />
   </ItemGroup>
 
 </Project>
