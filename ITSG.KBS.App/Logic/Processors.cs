@@ -19,8 +19,6 @@ public class Processors
     {
         if (!i.IsGenericType) return false;
         var typeDef = i.GetGenericTypeDefinition();
-        System.Console.WriteLine(typeDef.Name == "IProcessor'2");
-        System.Console.WriteLine(typeDef.Namespace);
         return typeDef.Name == "IProcessor`2" && typeDef.Namespace == "ITSG.KBS";
     }
 

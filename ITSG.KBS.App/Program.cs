@@ -1,13 +1,21 @@
-﻿
-var builder = new HostApplicationBuilder(args);
+﻿using Microsoft.AspNetCore.Builder;
+using Serilog;
+using Serilog.Extensions.Hosting;
+using Serilog.Extensions.Logging;
+
+var builder = Host.CreateApplicationBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.json", optional: true);
 builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true);
 builder.Configuration.AddUserSecrets(Assembly.GetExecutingAssembly(), optional: true);
 builder.Configuration.AddEnvironmentVariables();
 
+var serilogLogger = new Serilog.LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
+builder.Services.AddSingleton<ILoggerFactory>(services => new SerilogLoggerFactory(serilogLogger, true));
+builder.Services.AddSingleton<IDiagnosticContext>(services => new DiagnosticContext(serilogLogger));
+
 builder.Logging.ClearProviders();
-builder.Logging.AddSimpleConsole(o => { o.SingleLine = true; });
 if (System.Diagnostics.Debugger.IsAttached) builder.Logging.AddDebug();
+
 
 builder.Services.AddSingleton(sp =>
 {
@@ -27,8 +35,6 @@ builder.Services.AddSingleton<Processors>();
 
 var cancelSource = new CancellationTokenSource();
 
-Console.WriteLine("Starting...");
-
 var host = builder.Build();
 var logger = host.Services.GetRequiredService<ILoggerFactory>().CreateLogger("PROGRAM");
 
@@ -42,4 +48,5 @@ Console.CancelKeyPress += (s, e) =>
 };
 
 host.Run();
+
 
