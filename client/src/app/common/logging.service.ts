@@ -9,7 +9,7 @@ import { ConfigService } from './config.service';
 export class LoggingService {
 	private readonly logs$ = new Subject<LogMessage>();
 
-	constructor(http: HttpClient, config: ConfigService) {
+	constructor(readonly http: HttpClient, readonly config: ConfigService) {
 		this.logs$
 			.pipe(
 				filter(msg => msg.level >= config.current$.value.logLevelForBackend),
