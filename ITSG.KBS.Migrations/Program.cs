@@ -41,7 +41,4 @@ if (args.Length >= 1)
 var sp = serviceCollection.BuildServiceProvider(validateScopes: false); // validateScopes according to FluentMigration docs
 var runner = sp.GetRequiredService<IMigrationRunner>();
 
-
-
 runner.MigrateUp();
-//runner.MigrateDown(0);
