@@ -32,8 +32,8 @@ public class M_004_Config : Migration
                 Name = "Frontend Log Level Backend",
                 Type = "text",
                 IsForFrontend = true,
-                Description = "Loglevel ab dem Nachrichten in der Browser Console ausgegeben werden (debug, info, warn, error)",
-                Value = "debug"
+                Description = "Loglevel ab dem Nachrichten an Server weitergegeben werden (debug, info, warn, error)",
+                Value = "info"
             });
     }
 }
