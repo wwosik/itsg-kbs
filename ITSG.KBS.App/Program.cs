@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Data;
+using Microsoft.AspNetCore.Builder;
 using Serilog;
 using Serilog.Extensions.Hosting;
 using Serilog.Extensions.Logging;
@@ -13,6 +14,10 @@ builder.UseSerilog();
 builder.Services.AddRabbitMQ("RabbitMQ");
 
 builder.Services.AddSingleton<Processors>();
+
+var sqlConnectionString = builder.Configuration.GetConnectionString("DB");
+if (string.IsNullOrEmpty(sqlConnectionString)) throw new Exception("Missing connection string DB");
+builder.Services.AddTransient<IDbConnection>(sp => new SqlConnection(sqlConnectionString));
 
 var cancelSource = new CancellationTokenSource();
 
