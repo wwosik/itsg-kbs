@@ -25,7 +25,7 @@ var app = builder.Build();
 app.UseForwardedHeaders(new() { ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.All });
 
 var requestCounter = 0;
-app.Use(async (context, next) =>
+app.UseWhen(hc => hc.Request.Path.StartsWithSegments("/api"), a => a.Use(async (context, next) =>
 {
     var myId = Interlocked.Increment(ref requestCounter);
     var loggerFactory = app.Services.GetRequiredService<ILoggerFactory>();
@@ -43,7 +43,7 @@ app.Use(async (context, next) =>
         exceptionLogger.LogError(ex, "[{id}] {method} {url}: {message}", myId, context.Request.Method, context.Request.Path, ex.GetBaseException().Message);
         throw;
     }
-});
+}));
 
 app.UseRouting();
 app.MapControllers();

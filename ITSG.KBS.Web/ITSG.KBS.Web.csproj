@@ -14,6 +14,7 @@
     <PackageReference Include="ITSG.DFV.Common" Version="1.0.1" />
     <PackageReference Include="ITSG.DFV.Common.Hosting.Bus" Version="1.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="7.0.3" />
+    <PackageReference Include="Serilog.Filters.Expressions" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>

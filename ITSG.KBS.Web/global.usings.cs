@@ -22,3 +22,4 @@ global using System.Reflection;
 global using ITSG.DFV.Common;
 global using ITSG.KBS.Web;
 global using ITSG.KBS;
+global using EasyNetQ;
