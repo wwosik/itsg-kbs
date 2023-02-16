@@ -22,6 +22,8 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
+app.UseForwardedHeaders(new() { ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.All });
+
 var requestCounter = 0;
 app.Use(async (context, next) =>
 {
@@ -46,9 +48,12 @@ app.Use(async (context, next) =>
 app.UseRouting();
 app.MapControllers();
 
-app.MapGet("/", () => "Hello World!");
+app.UseWhen(hc => !hc.Request.Path.StartsWithSegments("/api"), spaApp => spaApp.UseSpa(o =>
+{
+    o.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+}));
 
+app.MapGet("*", async context => { context.Response.StatusCode = 404; await context.Response.WriteAsync("Webseite nicht verfügbar."); });
 
-//app.HandleDevTimeResponses();
 
 app.Run();

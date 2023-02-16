@@ -13,6 +13,7 @@
     <PackageReference Include="EasyNetQ.Serialization.SystemTextJson" Version="7.4.3" />
     <PackageReference Include="ITSG.DFV.Common" Version="1.0.1" />
     <PackageReference Include="ITSG.DFV.Common.Hosting.Bus" Version="1.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="7.0.3" />
   </ItemGroup>
 
   <ItemGroup>

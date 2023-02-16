@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace ITSG.KBS.Web;
 
-[Route("admin/roles")]
+[Route("/api/admin/roles")]
 public class RolesController : Controller
 {
     private readonly ILogger<RolesController> logger;
