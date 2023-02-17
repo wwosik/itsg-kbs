@@ -18,19 +18,19 @@ public class ConfigProcessor : IProcessor<GetFrontendConfigRequest, GetFrontendC
     public async Task<GetFrontendConfigResponse> ProcessAsync(GetFrontendConfigRequest request, CancellationToken cancellationToken)
     {
         var items = await this.db.QueryAsync<ConfigItemValue>("SELECT Name, Value FROM Config WHERE IsForFrontend = 1");
-        return new GetFrontendConfigResponse { Items = items };
+        return new GetFrontendConfigResponse { Items = items.ToArray() };
 
     }
 
     public async Task<GetConfigResponse> ProcessAsync(GetConfigRequest request, CancellationToken cancellationToken)
     {
-        var items = await this.db.QueryAsync<ConfigItem>("SELECT Name, Value, Description, Type, IsForFrontend FROM Config WHERE IsForFrontend = 1");
-        return new GetFrontendConfigResponse { Items = items };
+        var items = await this.db.QueryAsync<ConfigItem>("SELECT Name, Value, Description, Type, IsForFrontend FROM Config");
+        return new GetConfigResponse { Items = items.ToArray() };
     }
 
     public async Task<UpdateConfigResponse> ProcessAsync(UpdateConfigRequest request, CancellationToken cancellationToken)
     {
-        await db.UpdateAsync(@"
+        await db.ExecuteAsync(@"
         UPDATE Config 
         SET Value = @Value 
             , LastChangedOn = CURRENT_TIMESTAMP

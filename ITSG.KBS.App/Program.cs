@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Data.SqlClient;
 using Microsoft.AspNetCore.Builder;
 using Serilog;
 using Serilog.Extensions.Hosting;
