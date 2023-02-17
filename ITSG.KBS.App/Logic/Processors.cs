@@ -1,4 +1,4 @@
-using EasyNetQ;
+using ITSG.KBS.Messages;
 
 namespace ITSG.KBS;
 
@@ -22,13 +22,22 @@ public class Processors
         return typeDef.Name == "IProcessor`2" && typeDef.Namespace == "ITSG.KBS";
     }
 
-    public void EnableProcessor<TProcessor, TRequest, TResponse>(CancellationToken cancellationToken) where TProcessor : IProcessor<TRequest, TResponse>
+    public void EnableProcessor<TProcessor, TRequest, TResponse>(CancellationToken cancellationToken) where TProcessor : IProcessor<TRequest, TResponse> where TResponse : IResponse, new()
     {
         this.logger.LogInformation("Enabled processing of '{request}' by '{processor}'", typeof(TRequest).Name, typeof(TProcessor).Name);
-        bus.Rpc.RespondAsync<TRequest, TResponse>((req, token) =>
+        bus.Rpc.RespondAsync<TRequest, TResponse>(async (req, token) =>
            {
-               var processor = (IProcessor<TRequest, TResponse>)ActivatorUtilities.CreateInstance<TProcessor>(this.serviceProvider);
-               return processor.ProcessAsync(req, token);
+               try
+               {
+                   var processor = (IProcessor<TRequest, TResponse>)ActivatorUtilities.CreateInstance<TProcessor>(this.serviceProvider);
+                   return await processor.ProcessAsync(req, token);
+               }
+               catch (Exception ex)
+               {
+                   var message = ex.GetBaseException().Message;
+                   this.logger.LogError(ex, "{message}", message);
+                   return new TResponse { Error = message };
+               }
            }, o => { }, cancellationToken);
     }
 

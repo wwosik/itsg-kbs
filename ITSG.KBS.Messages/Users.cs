@@ -1,12 +1,14 @@
 namespace ITSG.KBS.Messages.Users;
 
+
 public class EnumeratePermissionsRequest
 {
 }
 
-public class EnumeratePermissionsResponse
+public class EnumeratePermissionsResponse : IResponse
 {
     public Permission[] Permissions { get; set; } = Array.Empty<Permission>();
+    public string? Error { get; set; }
 }
 
 public class Permission

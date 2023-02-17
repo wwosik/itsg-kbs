@@ -8,9 +8,10 @@ public class ConfigItemValue
 
 public class GetFrontendConfigRequest { }
 
-public class GetFrontendConfigResponse
+public class GetFrontendConfigResponse : IResponse
 {
     public ConfigItemValue[] Items { get; set; } = Array.Empty<ConfigItemValue>();
+    public string? Error { get; set; }
 }
 
 public class ConfigItem
@@ -24,14 +25,21 @@ public class ConfigItem
 
 public class GetConfigRequest { }
 
-public class GetConfigResponse
+public class GetConfigResponse : IResponse
 {
     public ConfigItem[] Items { get; set; } = Array.Empty<ConfigItem>();
+    public string? Error { get; set; }
+
 }
 
 public class UpdateConfigRequest
 {
     public ConfigItemValue[] Items { get; set; } = Array.Empty<ConfigItemValue>();
+
+
 }
 
-public class UpdateConfigResponse { }
+public class UpdateConfigResponse : IResponse
+{
+    public string? Error { get; set; }
+}
