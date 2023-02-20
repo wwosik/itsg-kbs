@@ -24,7 +24,8 @@ public class M_004_Config : Migration
 
         Create.Table("Config").WithDescription("Definition einer Eigenschaft vom Benutzer")
             .WithColumn("Name").AsString(100, "Latin1_General_CI_AS").NotNullable().PrimaryKey().WithColumnDescription("Name")
-            .WithColumn("IsForFrontend").AsFixedLengthString(1, "Latin1_General_CI_AS").ForeignKey("FK_Config_IsForFrontend", "Ref_YesNo", "Value").NotNullable().WithColumnDescription("Wenn 1, wird jedem Frontend-User ausgegeben")
+            .WithColumn("IsForFrontend").AsFixedLengthString(1, "Latin1_General_CI_AS").ForeignKey("FK_Config_IsForFrontend", "Ref_YesNo", "Value")
+                .NotNullable().WithColumnDescription("Wenn Y, wird jedem Frontend-User ausgegeben")
             .WithColumn("Type").AsString(20, "Latin1_General_CI_AS").NotNullable().ForeignKey("FK_Config_PropertyType", "PropertyType", "Type")
             .WithColumn("Description").AsString(int.MaxValue, "Latin1_General_CI_AS").NotNullable().WithColumnDescription("Beschreibung der Eigenschaft")
             .WithColumn("Value").AsString(int.MaxValue, "Latin1_General_CI_AS").NotNullable().WithColumnDescription("Serialisierter Wert");

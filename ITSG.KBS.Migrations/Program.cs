@@ -12,6 +12,7 @@ using FluentMigrator.Runner.Initialization;
 if (args.Length == 0)
 {
     Console.WriteLine("Specify up [migration] or down <migration>");
+    return;
 }
 
 bool isUpMode;
