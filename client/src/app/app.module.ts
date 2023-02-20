@@ -10,9 +10,10 @@ import de from 'date-fns/locale/de';
 import { MaterialModule } from './common/material.module';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { InitComponent } from './general/init/init.component';
 
 @NgModule({
-	declarations: [AppComponent],
+	declarations: [AppComponent, InitComponent],
 	imports: [
 		BrowserModule,
 		AppRoutingModule,
@@ -26,6 +27,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 		{ provide: DATE_PIPE_DEFAULT_OPTIONS, useValue: { timezone: 'Europe/Berlin' } },
 		{ provide: MAT_DATE_LOCALE, useValue: de },
 	],
-	bootstrap: [AppComponent],
+	bootstrap: [InitComponent],
 })
 export class AppModule {}

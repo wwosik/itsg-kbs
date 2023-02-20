@@ -1,4 +1,5 @@
 using ITSG.KBS.Messages;
+using ITSG.KBS.Messages.Config;
 
 namespace ITSG.KBS;
 
@@ -24,9 +25,13 @@ public class Processors
 
     public void EnableProcessor<TProcessor, TRequest, TResponse>(CancellationToken cancellationToken) where TProcessor : IProcessor<TRequest, TResponse> where TResponse : IResponse, new()
     {
-        this.logger.LogInformation("Enabled processing of '{request}' by '{processor}'", typeof(TRequest).Name, typeof(TProcessor).Name);
-        bus.Rpc.RespondAsync<TRequest, TResponse>(async (req, token) =>
+        this.logger.LogDebug("Enabling processing of '{request}' by '{processor}'...", typeof(TRequest).Name, typeof(TProcessor).Name);
+        try
+        {
+            bus.Rpc.RespondAsync<TRequest, TResponse>(async (req, token) =>
            {
+               this.logger.LogDebug("Message {msg} received", typeof(TRequest));
+
                try
                {
                    var processor = (IProcessor<TRequest, TResponse>)ActivatorUtilities.CreateInstance<TProcessor>(this.serviceProvider);
@@ -35,10 +40,18 @@ public class Processors
                catch (Exception ex)
                {
                    var message = ex.GetBaseException().Message;
-                   this.logger.LogError(ex, "{message}", message);
+                   this.logger.LogError(ex, "Processor error: {message}", message);
                    return new TResponse { Error = message };
                }
-           }, o => { }, cancellationToken);
+           }, o => { }, cancellationToken).GetAwaiter().GetResult();
+
+            this.logger.LogInformation("Enabled processing of '{request}' by '{processor}'.", typeof(TRequest).Name, typeof(TProcessor).Name);
+        }
+        catch (Exception ex)
+        {
+            this.logger.LogError(ex, "Failed to connect to RabbitMQ.");
+            throw;
+        }
     }
 
     public void EnableProcessors(CancellationToken cancellationToken)

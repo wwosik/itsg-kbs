@@ -17,15 +17,19 @@ public class ConfigProcessor : IProcessor<GetFrontendConfigRequest, GetFrontendC
 
     public async Task<GetFrontendConfigResponse> ProcessAsync(GetFrontendConfigRequest request, CancellationToken cancellationToken)
     {
-        var items = await this.db.QueryAsync<ConfigItemValue>("SELECT Name, Value FROM Config WHERE IsForFrontend = 1");
+        var items = await this.db.QueryAsync<ConfigItemValue>("SELECT Name, Value FROM Config WHERE IsForFrontend = 'Y'");
         return new GetFrontendConfigResponse { Items = items.ToArray() };
 
     }
 
     public async Task<GetConfigResponse> ProcessAsync(GetConfigRequest request, CancellationToken cancellationToken)
     {
+        this.logger.LogDebug("GetConfig started");
         var items = await this.db.QueryAsync<ConfigItem>("SELECT Name, Value, Description, Type, IsForFrontend FROM Config");
-        return new GetConfigResponse { Items = items.ToArray() };
+        var result = new GetConfigResponse { Items = items.ToArray() };
+        this.logger.LogDebug("GetConfig completed: {result}", result);
+
+        return result;
     }
 
     public async Task<UpdateConfigResponse> ProcessAsync(UpdateConfigRequest request, CancellationToken cancellationToken)
