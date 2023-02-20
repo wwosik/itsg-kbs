@@ -8,6 +8,39 @@ using Microsoft.Extensions.Configuration;
 using FluentMigrator.Runner;
 using FluentMigrator.Runner.Initialization;
 
+
+if (args.Length == 0)
+{
+    Console.WriteLine("Specify up [migration] or down <migration>");
+}
+
+bool isUpMode;
+int migrationNumber = -1;
+
+switch (args[0])
+{
+    case "up":
+        isUpMode = true;
+        if (args.Length >= 2 && !int.TryParse(args[1], out migrationNumber))
+        {
+            Console.WriteLine("invalid migration number");
+            return;
+        }
+        break;
+    case "down":
+        isUpMode = false;
+        if (args.Length < 2 || !int.TryParse(args[1], out migrationNumber))
+        {
+            Console.WriteLine("down must be specified with a valid migration number");
+            return;
+        }
+        break;
+    default:
+        Console.WriteLine("Unknown command. Specify up [migration] or down <migration>");
+        return;
+}
+
+
 var builder = Host.CreateApplicationBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.json", optional: true);
 builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true);
@@ -15,7 +48,7 @@ builder.Configuration.AddUserSecrets(Assembly.GetExecutingAssembly(), optional: 
 builder.Configuration.AddEnvironmentVariables();
 
 var connectionString = builder.Configuration.GetConnectionString("DB");
-if (string.IsNullOrEmpty("DB"))
+if (string.IsNullOrEmpty(connectionString))
 {
     System.Console.WriteLine("Connection string DB fehlt!");
     Environment.Exit(1);
@@ -41,4 +74,19 @@ if (args.Length >= 1)
 var sp = serviceCollection.BuildServiceProvider(validateScopes: false); // validateScopes according to FluentMigration docs
 var runner = sp.GetRequiredService<IMigrationRunner>();
 
-runner.MigrateUp();
+
+if (isUpMode)
+{
+    if (migrationNumber >= 0)
+    {
+        runner.MigrateUp(migrationNumber);
+    }
+    else
+    {
+        runner.MigrateUp();
+    }
+}
+else
+{
+    runner.MigrateDown(migrationNumber);
+}

@@ -36,12 +36,12 @@ public class M_001_Organisations : Migration
             .WithColumn("Description").AsString(int.MaxValue, "Latin1_General_CI_AS").NotNullable().WithColumnDescription("Beschreibung der Eigenschaft");
 
         Create.Table("OrganisationProperty").WithDescription("Wert der Eigenschaft von Organisation")
-            .WithColumn("Id").AsInt32().NotNullable().PrimaryKey().Identity().WithColumnDescription("Internes Id")
-            .WithColumn("Guid").AsGuid().NotNullable().Unique().WithDefault(SystemMethods.NewGuid).WithColumnDescription("Externes Id")
             .WithColumn("OrganisationId").AsInt32().NotNullable().ForeignKey("FK_OrganisationProperty_Organisation", "Organisation", "Id").OnDelete(System.Data.Rule.Cascade)
             .WithColumn("Property").AsString(100, "Latin1_General_CI_AS").NotNullable().ForeignKey("FK_OrganisationProperty_OrganisationPropertyDefinition", "OrganisationPropertyDefinition", "Name").OnDelete(System.Data.Rule.None)
             .WithColumn("Value").AsString(int.MaxValue).NotNullable().WithColumnDescription("Serialisierter Wert")
             .WithColumn("LastChangedOn").AsDateTime2().NotNullable().WithColumnDescription("Zeitstempel, wann der Eintrag geändert ist");
+
+        Create.PrimaryKey("PK_OrganisationProperty").OnTable("OrganisationProperty").Columns("OrganisationId", "Property");
 
         Insert.IntoTable("OrganisationPropertyDefinition")
             .Row(new { Name = "Street", Type = "text", Description = "Strassenadresse" })
