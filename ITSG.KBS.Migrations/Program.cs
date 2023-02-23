@@ -7,7 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using FluentMigrator.Runner;
 using FluentMigrator.Runner.Initialization;
-
+using System.Linq;
 
 if (args.Length == 0)
 {
@@ -63,12 +63,13 @@ serviceCollection.AddFluentMigratorCore().ConfigureRunner(rb => rb.AddSqlServer(
                                 .ScanIn(Assembly.GetExecutingAssembly()).For.All()
                                 );
 
-if (args.Length >= 1)
+if (args.Any(a => a == "--dev"))
 {
+    System.Console.WriteLine("Adding DEV");
     serviceCollection.Configure<RunnerOptions>(o =>
     {
         o.IncludeUntaggedMigrations = true;
-        o.Tags = new[] { args[0] };
+        o.Tags = new[] { "dev" };
     });
 }
 

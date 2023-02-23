@@ -6,7 +6,7 @@ public class M_005_Texts : Migration
 {
     public override void Down()
     {
-        Delete.Table("Texts");
+        Delete.Table("AppText");
     }
 
     public override void Up()

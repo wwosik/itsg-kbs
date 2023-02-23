@@ -19,7 +19,6 @@ public class ConfigProcessor : IProcessor<GetFrontendConfigRequest, GetFrontendC
     {
         var items = await this.db.QueryAsync<ConfigItemValue>("SELECT Name, Value FROM Config WHERE IsForFrontend = 'Y'");
         return new GetFrontendConfigResponse { Items = items.ToArray() };
-
     }
 
     public async Task<GetConfigResponse> ProcessAsync(GetConfigRequest request, CancellationToken cancellationToken)
